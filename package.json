@@ -1,0 +1,32 @@
+{
+  "name": "graphql-booking-api",
+  "version": "1.0.0",
+  "description": "GraphQL API for bookings",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shub0y/GraphQL-Booking-API.git"
+  },
+  "keywords": [
+    "graphql",
+    "booking",
+    "react",
+    "mongodb"
+  ],
+  "author": "Shubham Gadewar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shub0y/GraphQL-Booking-API/issues"
+  },
+  "homepage": "https://github.com/shub0y/GraphQL-Booking-API#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
