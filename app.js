@@ -22,7 +22,16 @@ app.use('/graphql', graphqlHttp({
             mutation: RootMutation
         }
     `),
-    rootValue: {}
+    rootValue: {
+        events: () =>{
+            return ['Romantic Cooking', 'Sailing', 'All night coding'];
+        },
+        createEvent: (args) => {
+            const eventName = args.name;
+            return eventName;
+        }
+    },
+    graphiql: true
 }));
 
 app.listen(3000);
