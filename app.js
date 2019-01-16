@@ -2,7 +2,7 @@ const express = require ('express');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
-const mongoose = require ('mongoose');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -59,16 +59,17 @@ app.use('/graphql', graphqlHttp({
     graphiql: true
 }));
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${
+mongoose
+.connect(`mongodb://${process.env.MONGO_USER}:${
     process.env.MONGO_PASSWORD
-    }@node-rest-shop-bafpf.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,{
-    useNewUrlParser: true 
-})
-  .then(() => {
-    console.log("DB connected....");     
+ }@main-cluster-shard-00-00-bafpf.mongodb.net:27017,
+    main-cluster-shard-00-01-bafpf.mongodb.net:27017,
+    main-cluster-shard-00-02-bafpf.mongodb.net:27017/${process.env.MONGO_DB}?ssl=true&replicaSet=Main-Cluster-shard-0&authSource=admin&retryWrites=true
+`, { useNewUrlParser: true })
+.then(() => {
     app.listen(3000);
-  })
-  .catch(err => {
-    console.log(err);
-  });
-
+})
+.catch(err => {
+console.log("Error here...");
+console.log(err);
+});
