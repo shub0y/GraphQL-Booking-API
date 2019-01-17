@@ -3,8 +3,11 @@ const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
 const mongoose = require('mongoose');
-const Event = require('./models/event');
 const bcrypt = require('bcryptjs');
+
+const Event = require('./models/event');
+const User = require('./models/user');
+
 
 const app = express();
 
@@ -81,7 +84,13 @@ app.use('/graphql', graphqlHttp({
             });            
         },
         createUser: args => {
-            return bcrypt.hash(args.userInput.password, 12)
+            return  User.findOne({email: args.userInput.email})
+            .then(user => {
+                if(user){
+                    throw new Error('User already exist!');
+                }
+                return bcrypt.hash(args.userInput.password, 12);
+            })
               .then(hashedPassword => {
                 const user = new User({
                   email: args.userInput.email,
