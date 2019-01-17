@@ -43,6 +43,7 @@ app.use('/graphql', graphqlHttp({
     
         type RootQuery {
             events: [Event!]!
+            users: [User!]!
         }
 
         type RootMutation {
@@ -56,6 +57,17 @@ app.use('/graphql', graphqlHttp({
         }
     `),
     rootValue: {
+        users: () => {
+            return User.find()
+            .then(users => {
+                return users.map(user => {
+                    return { ...user._doc, _id: user._doc._id.toString() };
+                });
+            })
+            .catch (err => {
+                throw err;
+            });
+        },
         events: () =>{
             return Event.find()
             .then(events => {
@@ -91,19 +103,19 @@ app.use('/graphql', graphqlHttp({
                 }
                 return bcrypt.hash(args.userInput.password, 12);
             })
-              .then(hashedPassword => {
+            .then(hashedPassword => {
                 const user = new User({
-                  email: args.userInput.email,
-                  password: hashedPassword
-                });
-                return user.save();
-              })
-              .then(result => {
+                email: args.userInput.email,
+                password: hashedPassword
+            });
+            return user.save();
+            })
+            .then(result => {
                 return { ...result._doc, _id: result.id };
-              })
-              .catch(err => {
+            })
+            .catch(err => {
                 throw err;
-              });      
+            });      
         }
     }, 
     graphiql: true
