@@ -61,7 +61,7 @@ app.use('/graphql', graphqlHttp({
             return User.find()
             .then(users => {
                 return users.map(user => {
-                    return { ...user._doc, _id: user._doc._id.toString() };
+                    return { ...user._doc, password: null, _id: user._doc._id.toString() };
                 });
             })
             .catch (err => {
@@ -83,14 +83,27 @@ app.use('/graphql', graphqlHttp({
                 title: args.eventInput.title,
                 description: args.eventInput.description,
                 price: args.eventInput.price,
-                date: new Date(args.eventInput.date) 
+                date: new Date(args.eventInput.date),
+                creator: '5c40de2a54d9cd647552a8d4'
             });
+            let createdEvent;
             return event
             .save()
             .then(result => {
-                console.log(result);
-                return {...result._doc, _id: result._doc._id.toString()};                
-            }).catch(err => {
+                createdEvent =  {...result._doc, _id: result._doc._id.toString()};
+                User.findById('5c40de2a54d9cd647552a8d4')
+            })
+            .then(user =>{
+                if(!user){
+                    throw new Error('User not found');
+                }
+                user.createdEvents.push(event);
+                return user.save();
+            })
+            .then(result => {
+                return createdEvent ;     
+            })
+            .catch(err => {
                 console.log(err);                
                 throw err;
             });            
@@ -115,7 +128,7 @@ app.use('/graphql', graphqlHttp({
             })
             .catch(err => {
                 throw err;
-            });      
+            });
         }
     }, 
     graphiql: true
@@ -127,8 +140,7 @@ mongoose
     process.env.MONGO_PASSWORD
  }@main-cluster-shard-00-00-bafpf.mongodb.net:27017,
     main-cluster-shard-00-01-bafpf.mongodb.net:27017,
-    main-cluster-shard-00-02-bafpf.mongodb.net:27017/${process.env.MONGO_DB}?ssl=true&replicaSet=Main-Cluster-shard-0&authSource=admin&retryWrites=true
-`, { useNewUrlParser: true })
+    main-cluster-shard-00-02-bafpf.mongodb.net:27017/${process.env.MONGO_DB}?ssl=true&replicaSet=Main-Cluster-shard-0&authSource=admin&retryWrites=true`, { useNewUrlParser: true })
 .then(() => {
     app.listen(3000);
 })
