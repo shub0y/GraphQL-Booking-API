@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/shub0y/GraphQL-Booking-API#readme",
   "dependencies": {
+    "bcrypt": "^3.0.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
