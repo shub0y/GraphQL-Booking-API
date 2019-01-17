@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
 const mongoose = require('mongoose');
-const Event = require('./models/events');
+const Event = require('./models/event');
 
 const app = express();
 
@@ -41,7 +41,8 @@ app.use('/graphql', graphqlHttp({
     `),
     rootValue: {
         events: () =>{
-            return Event.find().then(events => {
+            return Event.find()
+            .then(events => {
                 return events.map(event => {
                     return { ...event._doc, _id: event._doc._id.toString() };
                 });
